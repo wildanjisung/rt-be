@@ -9,5 +9,6 @@ import { ResidenceRepository } from './residence.repository';
   imports: [TypeOrmModule.forFeature([ResidenceRepository]), AuthModule],
   controllers: [ResidenceController],
   providers: [ResidenceService],
+  exports: [ResidenceService],
 })
 export class ResidenceModule {}

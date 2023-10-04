@@ -4,6 +4,7 @@ import { GetResidenceFilterDto } from './dto/get-residences-filter.dto';
 import { User } from 'src/auth/user.entity';
 import { CreateResidenceDto } from './dto/create-residence.dto';
 import { ResidenceStatus } from './residence-status.enum';
+import { InternalServerErrorException } from '@nestjs/common';
 
 @EntityRepository(Residence)
 export class ResidenceRepository extends Repository<Residence> {
@@ -27,7 +28,7 @@ export class ResidenceRepository extends Repository<Residence> {
     }
 
     const residence = await query
-      // .leftJoinAndSelect('residence.user', 'related')
+      .leftJoinAndSelect('residence.user', 'related')
       .getMany();
     return residence;
   }
@@ -44,5 +45,19 @@ export class ResidenceRepository extends Repository<Residence> {
 
     await this.save(task);
     return task;
+  }
+
+  async getResidenceByUser(UserId: string): Promise<Residence> {
+    try {
+      const query = this.createQueryBuilder('residence').leftJoinAndSelect(
+        'residence.user',
+        'related',
+      );
+      query.andWhere('residence.user.id = :UserId', { UserId });
+      const residence = await query.getOne();
+      return residence;
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
   }
 }

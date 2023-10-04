@@ -1,4 +1,5 @@
 import { Exclude } from 'class-transformer';
+import { Bill } from 'src/bill/bill.entity';
 import { Residence } from 'src/residence/residence.entity';
 import { Task } from 'src/tasks/task.entity';
 import {
@@ -21,6 +22,6 @@ export class User {
   @Exclude()
   password: string;
 
-  @OneToMany((_type) => Task, (task) => task.user, { eager: true })
+  @OneToMany((_type) => Task, (task) => task.user, { eager: false })
   tasks: Task[];
 }

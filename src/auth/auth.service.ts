@@ -19,8 +19,11 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async signUp(authCredentialsDto: AuthCredentialsDto): Promise<void> {
-    return this.usersRepository.createUser(authCredentialsDto);
+  async signUp(
+    authCredentialsDto: AuthCredentialsDto,
+  ): Promise<{ accessToken: string }> {
+    await this.usersRepository.createUser(authCredentialsDto);
+    return await this.signIn(authCredentialsDto);
   }
 
   async signIn(
@@ -46,5 +49,9 @@ export class AuthService {
     }
 
     return found;
+  }
+
+  async getUser(): Promise<User[]> {
+    return await this.usersRepository.find();
   }
 }

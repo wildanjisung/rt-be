@@ -32,20 +32,20 @@ export class ResidenceController {
   }
 
   @Get('/:id')
-  getTaskById(@Param('id') id: string): Promise<Residence> {
+  getResidenceById(@Param('id') id: string): Promise<Residence> {
     return this.residenceService.getResidenceById(id);
   }
 
   @Post()
-  createTask(
+  createResidence(
     @Body() createResidenceDto: CreateResidenceDto,
   ): Promise<Residence> {
-    return this.residenceService.createTask(createResidenceDto);
+    return this.residenceService.createResidence(createResidenceDto);
   }
 
   @Delete('/:id')
-  deleteTask(@Param('id') id: string): Promise<void> {
-    return this.residenceService.deleteTask(id);
+  deleteResidence(@Param('id') id: string): Promise<void> {
+    return this.residenceService.deleteResidence(id);
   }
 
   @Put('/:id')

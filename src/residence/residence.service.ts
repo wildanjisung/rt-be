@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ResidenceRepository } from './residence.repository';
 import { GetResidenceFilterDto } from './dto/get-residences-filter.dto';
@@ -8,6 +12,7 @@ import { CreateResidenceDto } from './dto/create-residence.dto';
 import { UpdateResidenceDto } from './dto/update-residence.dto';
 import { UsersRepository } from 'src/auth/users.repository';
 import { AuthService } from 'src/auth/auth.service';
+import { ResidenceStatus } from './residence-status.enum';
 
 @Injectable()
 export class ResidenceService {
@@ -36,11 +41,11 @@ export class ResidenceService {
     return found;
   }
 
-  createTask(createTaskDto: CreateResidenceDto): Promise<Residence> {
-    return this.residenceRepository.createResidence(createTaskDto);
+  createResidence(createResidenceDto: CreateResidenceDto): Promise<Residence> {
+    return this.residenceRepository.createResidence(createResidenceDto);
   }
 
-  async deleteTask(id: string): Promise<void> {
+  async deleteResidence(id: string): Promise<void> {
     const result = await this.residenceRepository.delete({ id });
 
     if (result.affected === 0) {
@@ -53,9 +58,15 @@ export class ResidenceService {
     updateResidenceDto: UpdateResidenceDto,
   ): Promise<Residence> {
     const { address, status, userId } = updateResidenceDto;
-    const residence = await this.getResidenceById(id);
 
-    residence.status = status ?? residence.status;
+    // validate residence is exist
+    const residence = await this.getResidenceById(id);
+    // validate is user has been Occupied
+    const occupied = await this.residenceRepository.getResidenceByUser(userId);
+    if (occupied) {
+      throw new BadRequestException(`User ${userId} has been occupied`);
+    }
+
     residence.address = address ?? residence.address;
     if (userId) {
       const user = await this.authService.getUserById(userId);
@@ -65,6 +76,10 @@ export class ResidenceService {
       }
 
       residence.user = user;
+      residence.status = ResidenceStatus.OCCUPIED;
+    } else {
+      residence.user = null;
+      residence.status = ResidenceStatus.UNOCCUPIED;
     }
     await this.residenceRepository.save(residence);
 

@@ -20,14 +20,14 @@ $ git clone git@github.com:wildanjisung/rt-be.git
 ```
 - download semua depedensi
 ```bsh
-npm install
+yarn install
 ```
 
 ## Jalankan Aplikasi
 
 ```bash
 # watch mode
-$ npm run start:dev
+$ yarn start:dev
 ```
 
 ## API Collection

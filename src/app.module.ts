@@ -14,7 +14,7 @@ import { AudienceModule } from './audience/audience.module';
       database: './src/database/database.sqlite',
       // entities: [__dirname + '/../**/*.entity{.ts,.js}'],
       autoLoadEntities: true,
-      synchronize: true,
+      synchronize: false,
     }),
     AuthModule,
     ResidenceModule,

@@ -4,23 +4,22 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { ResidenceModule } from './residence/residence.module';
 import { BillModule } from './bill/bill.module';
+import { AudienceModule } from './audience/audience.module';
 
 @Module({
   imports: [
     TasksModule,
     TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'postgres',
-      database: 'task_management',
+      type: 'sqlite',
+      database: './src/database/database.sqlite',
+      // entities: [__dirname + '/../**/*.entity{.ts,.js}'],
       autoLoadEntities: true,
       synchronize: true,
     }),
     AuthModule,
     ResidenceModule,
     BillModule,
+    AudienceModule,
   ],
 })
 export class AppModule {}

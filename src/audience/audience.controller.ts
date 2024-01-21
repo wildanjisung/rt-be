@@ -41,10 +41,10 @@ export class AudienceController {
     return this.audienceService.create(createAudienceDto);
   }
 
-  // @Delete('/:id')
-  // delete(@Param('id') id: string): Promise<void> {
-  //   return this.audienceService.delete(id);
-  // }
+  @Delete('/:id')
+  delete(@Param('id') id: string): Promise<void> {
+    return this.audienceService.delete(id);
+  }
 
   @Put('/:id')
   update(

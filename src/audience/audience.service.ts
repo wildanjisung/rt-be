@@ -39,12 +39,12 @@ export class AudienceService {
     return found;
   }
 
-  // async delete(id: string): Promise<void> {
-  //   const result = await this.audienceRepository.delete(id);
-  //   if (result.affected === 0) {
-  //     throw new NotFoundException(`Bill with ID ${id} not found`);
-  //   }
-  // }
+  async delete(id: string): Promise<void> {
+    const result = await this.audienceRepository.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException(`Bill with ID ${id} not found`);
+    }
+  }
 
   // async update(
   //   id: string,

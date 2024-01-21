@@ -16,7 +16,7 @@ import { GetUser } from 'src/auth/get-user.decorator';
 import { User } from 'src/auth/user.entity';
 import { Audience } from './audience.entity';
 import { CreateAudienceDto } from './dto/create-audience.dto';
-import { UpdateBillDto } from './dto/update-audience.dto';
+import { UpdateAudienceDto } from './dto/update-audience.dto';
 
 @Controller('rsvp')
 // @UseGuards(AuthGuard())
@@ -41,15 +41,16 @@ export class AudienceController {
     return this.audienceService.create(createAudienceDto);
   }
 
-  // retricted
   // @Delete('/:id')
   // delete(@Param('id') id: string): Promise<void> {
   //   return this.audienceService.delete(id);
   // }
 
-  // retricted
-  // @Put('/:id')
-  // update(@Param('id') id: string): Promise<Audience> {
-  //   return this.audienceService.pay(id);
-  // }
+  @Put('/:id')
+  update(
+    @Param('id') id: string,
+    @Body() updateAudienceDto: UpdateAudienceDto,
+  ): Promise<Audience> {
+    return this.audienceService.update(id, updateAudienceDto);
+  }
 }

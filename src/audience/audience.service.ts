@@ -12,6 +12,7 @@ import { CreateAudienceDto } from './dto/create-audience.dto';
 import { ResidenceService } from 'src/residence/residence.service';
 import { Residence } from 'src/residence/residence.entity';
 import { AudienceStatus } from './audience-status.enum';
+import { UpdateAudienceDto } from './dto/update-audience.dto';
 
 @Injectable()
 export class AudienceService {
@@ -31,7 +32,9 @@ export class AudienceService {
   async select(id: string): Promise<Audience> {
     const found = await this.audienceRepository.findOne(id);
     if (!found) {
-      throw new NotFoundException(`Audience not found with Id ${id} not found`);
+      throw new NotFoundException(
+        `Participant not found with Id ${id} not found`,
+      );
     }
     return found;
   }
@@ -43,12 +46,39 @@ export class AudienceService {
   //   }
   // }
 
-  // async pay(id: string): Promise<Bill> {
-  //   const bill = await this.select(id);
-  //   if (bill.status === AudienceStatus.INVITED) {
-  //     throw new BadRequestException(`Bill with ID ${id} has been Paid`);
-  //   }
+  // async update(
+  //   id: string,
+  //   updateAudienceDto: UpdateAudienceDto,
+  // ): Promise<Audience> {
+  //   const audience = await this.select(id);
 
   //   return await this.audienceRepository.updateBill(bill);
   // }
+
+  async update(
+    id: string,
+    updateAudienceDto: UpdateAudienceDto,
+  ): Promise<Audience> {
+    const {
+      name,
+      company,
+      seat,
+      status,
+      dateArrive,
+      question,
+    } = updateAudienceDto;
+
+    const audience = await this.select(id);
+
+    audience.name = name;
+    audience.company = company;
+    audience.seat = seat;
+    // audience.status = status;
+    // audience.dateArrive = dateArrive;
+    audience.question = question;
+    await this.audienceRepository.save(audience);
+    const response = await this.select(id);
+
+    return response;
+  }
 }
